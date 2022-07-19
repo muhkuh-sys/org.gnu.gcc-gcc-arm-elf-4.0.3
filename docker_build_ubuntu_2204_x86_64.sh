@@ -33,7 +33,7 @@ docker exec ${CONTAINER} /bin/bash -c "cd ${WORKDIR} && bash ./03_extract_patch.
 docker exec ${CONTAINER} /bin/bash -c "cd ${WORKDIR} && bash ./04_build_linux.sh"
 
 # Create an archive.
-docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && tar --create --file ${BUILD_DIR}/${ARTIFACT_NAME}-ubuntu_2004-x86_64.tar.gz --gzip --directory ${BUILD_DIR_INSTALL_LINUX} ."
+docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && tar --create --file ${BUILD_DIR}/${ARTIFACT_NAME}-ubuntu_2204-x86_64.tar.gz --gzip --directory ${BUILD_DIR_INSTALL_LINUX} ."
 # Copy the archive from the container to the host.
 docker cp ${CONTAINER}:${BUILD_DIR}/${ARTIFACT_NAME}-ubuntu_2204-x86_64.tar.gz targets/
 
