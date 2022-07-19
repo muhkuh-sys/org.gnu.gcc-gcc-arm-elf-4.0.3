@@ -46,8 +46,8 @@ docker exec ${CONTAINER} /bin/bash -c "cd ${WORKDIR} && bash ./05_build_windows3
 docker exec ${CONTAINER} /bin/bash -c "cd ${WORKDIR} && bash ./06_build_windows64.sh"
 
 # Create an archive.
-docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && cd ${WORKDIR}/build/install/windows_x86 && zip -9 --recurse-paths ${WORKDIR}/build/${ARTIFACT_NAME}-windows-x86.zip ."
-docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && cd ${WORKDIR}/build/install/windows_x86_64 && zip -9 --recurse-paths ${WORKDIR}/build/${ARTIFACT_NAME}-windows-x86_64.zip ."
+docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && cd ${BUILD_DIR_INSTALL_WINDOWS_X86} && zip -9 --recurse-paths ${WORKDIR}/build/${ARTIFACT_NAME}-windows-x86.zip ."
+docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && cd ${BUILD_DIR_INSTALL_WINDOWS_X86_64} && zip -9 --recurse-paths ${WORKDIR}/build/${ARTIFACT_NAME}-windows-x86_64.zip ."
 
 # Copy the archive from the container to the host.
 docker cp ${CONTAINER}:${BUILD_DIR}/${ARTIFACT_NAME}-windows-x86.tar.gz targets/
