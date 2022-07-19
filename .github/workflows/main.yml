@@ -22,7 +22,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: artifacts_${{ matrix.platform.distribution-id }}_${{ matrix.platform.distribution-version }}_${{ matrix.platform.cpu-architecture }}
+        name: artifacts_ubuntu_20.04
         path: targets
   ubuntu2204:
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: artifacts_${{ matrix.platform.distribution-id }}_${{ matrix.platform.distribution-version }}_${{ matrix.platform.cpu-architecture }}
+        name: artifacts_ubuntu_22.04
         path: targets
   windows:
     runs-on: ubuntu-latest
@@ -52,5 +52,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: artifacts_${{ matrix.platform.distribution-id }}_${{ matrix.platform.distribution-version }}_${{ matrix.platform.cpu-architecture }}
+        name: artifacts_windows
         path: targets
