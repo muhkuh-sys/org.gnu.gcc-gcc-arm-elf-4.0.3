@@ -1,0 +1,462 @@
+diff -uNr gcc-4.0.4/boehm-gc/include/gc_config_macros.h gcc-4.0.4_patched/boehm-gc/include/gc_config_macros.h
+--- gcc-4.0.4/boehm-gc/include/gc_config_macros.h	2004-08-14 01:05:36.000000000 +0200
++++ gcc-4.0.4_patched/boehm-gc/include/gc_config_macros.h	2017-10-04 11:40:58.592921603 +0200
+@@ -63,7 +63,7 @@
+ 
+ #if defined(GC_THREADS) && !defined(GC_PTHREADS) && \
+     (defined(_WIN32) || defined(_MSC_VER) || defined(__CYGWIN__) \
+-     || defined(__MINGW32__) || defined(__BORLANDC__) \
++     || defined(__MINGW32__) || defined(__MINGW64__) || defined(__BORLANDC__) \
+      || defined(_WIN32_WCE))
+ # define GC_WIN32_THREADS
+ #endif
+@@ -85,7 +85,7 @@
+ # define GC_DLL
+ #endif
+ 
+-#if defined(__MINGW32__) && defined(GC_DLL)
++#if (defined(__MINGW32__) || defined(__MINGW64__)) && defined(GC_DLL)
+ # ifdef GC_BUILD
+ #   define GC_API __declspec(dllexport)
+ # else
+diff -uNr gcc-4.0.4/boehm-gc/include/private/gcconfig.h gcc-4.0.4_patched/boehm-gc/include/private/gcconfig.h
+--- gcc-4.0.4/boehm-gc/include/private/gcconfig.h	2005-09-06 16:21:25.000000000 +0200
++++ gcc-4.0.4_patched/boehm-gc/include/private/gcconfig.h	2017-10-04 11:40:58.596921715 +0200
+@@ -373,7 +373,7 @@
+ #   define CYGWIN32
+ #   define mach_type_known
+ # endif
+-# if defined(__MINGW32__)
++# if defined(__MINGW32__) || defined(__MINGW64__)
+ #   define I386
+ #   define MSWIN32
+ #   define mach_type_known
+diff -uNr gcc-4.0.4/boehm-gc/mach_dep.c gcc-4.0.4_patched/boehm-gc/mach_dep.c
+--- gcc-4.0.4/boehm-gc/mach_dep.c	2005-02-09 22:33:02.000000000 +0100
++++ gcc-4.0.4_patched/boehm-gc/mach_dep.c	2017-10-04 11:40:58.596921715 +0200
+@@ -212,7 +212,7 @@
+ #   endif	/* MACOS */
+ 
+ #       if defined(I386) &&!defined(OS2) &&!defined(SVR4) \
+-	&& (defined(__MINGW32__) || !defined(MSWIN32)) \
++	&& (defined(__MINGW32__) || defined(__MINGW64__)) || !defined(MSWIN32)) \
+ 	&& !defined(SCO) && !defined(SCO_ELF) \
+  	&& !(defined(LINUX) && defined(__ELF__)) \
+ 	&& !(defined(FREEBSD) && defined(__ELF__)) \
+@@ -268,7 +268,7 @@
+ #	  define HAVE_PUSH_REGS
+ #       endif
+ 
+-#       if defined(I386) && defined(MSWIN32) && !defined(__MINGW32__) \
++#       if defined(I386) && defined(MSWIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)\
+ 	   && !defined(USE_GENERIC)
+ 	/* I386 code, Microsoft variant		*/
+ 	  __asm  push eax
+diff -uNr gcc-4.0.4/boehm-gc/malloc.c gcc-4.0.4_patched/boehm-gc/malloc.c
+--- gcc-4.0.4/boehm-gc/malloc.c	2004-08-14 01:05:36.000000000 +0200
++++ gcc-4.0.4_patched/boehm-gc/malloc.c	2017-10-04 11:40:58.596921715 +0200
+@@ -405,7 +405,7 @@
+     GC_ASSERT(GC_base(p) == p);
+ #   if defined(REDIRECT_MALLOC) && \
+ 	(defined(GC_SOLARIS_THREADS) || defined(GC_LINUX_THREADS) \
+-	 || defined(__MINGW32__)) /* Should this be MSWIN32 in general? */
++	 || defined(__MINGW32__)) || defined(__MINGW64__)/* Should this be MSWIN32 in general? */
+ 	/* For Solaris, we have to redirect malloc calls during		*/
+ 	/* initialization.  For the others, this seems to happen 	*/
+  	/* implicitly.							*/
+diff -uNr gcc-4.0.4/boehm-gc/tests/test.c gcc-4.0.4_patched/boehm-gc/tests/test.c
+--- gcc-4.0.4/boehm-gc/tests/test.c	2004-08-14 01:05:36.000000000 +0200
++++ gcc-4.0.4_patched/boehm-gc/tests/test.c	2017-10-04 11:40:58.596921715 +0200
+@@ -1476,7 +1476,7 @@
+ #if !defined(PCR) && !defined(GC_SOLARIS_THREADS) \
+     && !defined(GC_WIN32_THREADS) && !defined(GC_PTHREADS) \
+     || defined(LINT)
+-#if defined(MSWIN32) && !defined(__MINGW32__)
++#if defined(MSWIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+   int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prev, LPTSTR cmd, int n)
+ #else
+   int main()
+diff -uNr gcc-4.0.4/configure gcc-4.0.4_patched/configure
+--- gcc-4.0.4/configure	2006-11-21 19:02:38.000000000 +0100
++++ gcc-4.0.4_patched/configure	2017-10-04 11:44:15.867187291 +0200
+@@ -1081,7 +1081,7 @@
+   i[3456789]86-*-go32* | i[3456789]86-*-msdosdjgpp*)
+     noconfigdirs="$noconfigdirs tcl tk expect dejagnu send-pr uudecode guile itcl gnuserv libffi"
+     ;;
+-  i[3456789]86-*-mingw32*)
++  i[3456789]86-*-mingw32* | x86_64-*-mingw32*)
+     # noconfigdirs="tcl tk expect dejagnu make texinfo bison patch flex byacc send-pr uudecode dejagnu diff guile perl itcl gnuserv"
+     noconfigdirs="$noconfigdirs expect dejagnu autoconf automake send-pr rcs guile perl texinfo libtool"
+     ;;
+@@ -1378,13 +1378,14 @@
+     # if the --with-newlib option has been given, because otherwise
+     # 'target-newlib' will appear in skipdirs.
+     ;;
+-  i[3456789]86-*-mingw32*)
++  i[3456789]86-*-mingw32* | x86_64-*-mingw32*)
+     target_configdirs="$target_configdirs target-mingw"
+     noconfigdirs="$noconfigdirs expect target-libgloss ${libgcj}"
+ 
+     # Can't build gdb for mingw32 if not native.
+     case "${host}" in
+       i[3456789]86-*-mingw32) ;; # keep gdb tcl tk expect etc.
++      x86_64-*-mingw32) ;; # keep gdb tcl tk expect etc.
+       *) noconfigdirs="$noconfigdirs gdb tcl tk expect itcl gnuserv"
+          ;;
+     esac
+diff -uNr gcc-4.0.4/configure.in gcc-4.0.4_patched/configure.in
+--- gcc-4.0.4/configure.in	2006-11-21 19:02:38.000000000 +0100
++++ gcc-4.0.4_patched/configure.in	2017-10-04 11:43:46.691114516 +0200
+@@ -294,7 +294,7 @@
+   i[[3456789]]86-*-go32* | i[[3456789]]86-*-msdosdjgpp*)
+     noconfigdirs="$noconfigdirs tcl tk expect dejagnu send-pr uudecode guile itcl gnuserv libffi"
+     ;;
+-  i[[3456789]]86-*-mingw32*)
++  i[[3456789]]86-*-mingw32* | x86_64-*-mingw32*)
+     # noconfigdirs="tcl tk expect dejagnu make texinfo bison patch flex byacc send-pr uudecode dejagnu diff guile perl itcl gnuserv"
+     noconfigdirs="$noconfigdirs expect dejagnu autoconf automake send-pr rcs guile perl texinfo libtool"
+     ;;
+@@ -587,13 +587,14 @@
+     # if the --with-newlib option has been given, because otherwise
+     # 'target-newlib' will appear in skipdirs.
+     ;;
+-  i[[3456789]]86-*-mingw32*)
++  i[[3456789]]86-*-mingw32* | x86_64-*-mingw32*)
+     target_configdirs="$target_configdirs target-mingw"
+     noconfigdirs="$noconfigdirs expect target-libgloss ${libgcj}"
+ 
+     # Can't build gdb for mingw32 if not native.
+     case "${host}" in
+       i[[3456789]]86-*-mingw32) ;; # keep gdb tcl tk expect etc.
++      x86_64-*-mingw32) ;; # keep gdb tcl tk expect etc.
+       *) noconfigdirs="$noconfigdirs gdb tcl tk expect itcl gnuserv"
+          ;;
+     esac
+diff -uNr gcc-4.0.4/fixincludes/configure gcc-4.0.4_patched/fixincludes/configure
+--- gcc-4.0.4/fixincludes/configure	2005-04-25 00:54:11.000000000 +0200
++++ gcc-4.0.4_patched/fixincludes/configure	2017-10-04 11:40:58.596921715 +0200
+@@ -2406,6 +2406,7 @@
+   case $host in
+ 	i?86-*-msdosdjgpp* | \
+ 	i?86-*-mingw32* | \
++	x86_64-*-mingw32* | \
+ 	*-*-beos* )
+ 		TARGET=twoprocess
+ 		;;
+diff -uNr gcc-4.0.4/fixincludes/configure.ac gcc-4.0.4_patched/fixincludes/configure.ac
+--- gcc-4.0.4/fixincludes/configure.ac	2005-04-25 00:54:11.000000000 +0200
++++ gcc-4.0.4_patched/fixincludes/configure.ac	2017-10-04 11:40:58.596921715 +0200
+@@ -37,6 +37,7 @@
+ [case $host in
+ 	i?86-*-msdosdjgpp* | \
+ 	i?86-*-mingw32* | \
++	x86_64-*-mingw32* | \
+ 	*-*-beos* )
+ 		TARGET=twoprocess
+ 		;;
+diff -uNr gcc-4.0.4/fixincludes/mkfixinc.sh gcc-4.0.4_patched/fixincludes/mkfixinc.sh
+--- gcc-4.0.4/fixincludes/mkfixinc.sh	2004-11-23 23:45:53.000000000 +0100
++++ gcc-4.0.4_patched/fixincludes/mkfixinc.sh	2017-10-04 11:40:58.596921715 +0200
+@@ -21,6 +21,7 @@
+     i?86-*-pe | \
+     i?86-*-cygwin* | \
+     i?86-*-mingw32* | \
++    x86_64-*-mingw32* | \
+     i?86-*-uwin* | \
+     i?86-*-interix* | \
+     powerpc-*-eabiaix* | \
+diff -uNr gcc-4.0.4/gcc/ada/adaint.c gcc-4.0.4_patched/gcc/ada/adaint.c
+--- gcc-4.0.4/gcc/ada/adaint.c	2005-02-10 14:51:58.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/adaint.c	2017-10-04 11:40:58.600921825 +0200
+@@ -73,7 +73,7 @@
+ #include "system.h"
+ #endif
+ 
+-#ifdef __MINGW32__
++#if defined (__MINGW32__) || defined (__MINGW64__)
+ #include "mingw32.h"
+ #include <sys/utime.h>
+ #include <ctype.h>
+@@ -83,7 +83,7 @@
+ #endif
+ #endif
+ 
+-#ifdef __MINGW32__
++#if defined (__MINGW32__) || defined (__MINGW64__)
+ #if OLD_MINGW
+ #include <sys/wait.h>
+ #endif
+@@ -250,7 +250,7 @@
+ 
+ #else
+ 
+-#if defined (__MINGW32__)
++#if defined (__MINGW32__) || defined (__MINGW64__)
+ #include "mingw32.h"
+ 
+ #if OLD_MINGW
+@@ -596,7 +596,7 @@
+   return fd < 0 ? -1 : fd;
+ }
+ 
+-#if defined (__EMX__) || defined (__MINGW32__)
++#if defined (__EMX__) || defined (__MINGW32__) || defined (__MINGW64__)
+ #define PERM (S_IREAD | S_IWRITE)
+ #elif defined (VMS)
+ /* Excerpt from DECC C RTL Reference Manual:
+@@ -775,7 +775,7 @@
+ void
+ __gnat_tmp_name (char *tmp_filename)
+ {
+-#ifdef __MINGW32__
++#if defined (__MINGW32__) || defined (__MINGW64__)
+   {
+     char *pname;
+ 
+@@ -2494,6 +2494,7 @@
+       && ! defined (_AIX) \
+       && ! (defined (__alpha__)  && defined (__osf__)) \
+       && ! defined (__MINGW32__) \
++      && ! defined (__MINGW64__) \
+       && ! (defined (__mips) && defined (__sgi)))
+ 
+ /* Dummy function to satisfy g-trasym.o.  Currently Solaris sparc, HP/UX,
+diff -uNr gcc-4.0.4/gcc/ada/adaint.h gcc-4.0.4_patched/gcc/ada/adaint.h
+--- gcc-4.0.4/gcc/ada/adaint.h	2005-02-10 14:51:58.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/adaint.h	2017-10-04 11:40:58.600921825 +0200
+@@ -153,7 +153,7 @@
+ extern int    __gnat_dup			   (int);
+ extern int    __gnat_dup2			   (int, int);
+ 
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) || defined(__MINGW64__)
+ extern void   __gnat_plist_init                    (void);
+ #endif
+ 
+diff -uNr gcc-4.0.4/gcc/ada/cal.c gcc-4.0.4_patched/gcc/ada/cal.c
+--- gcc-4.0.4/gcc/ada/cal.c	2003-11-04 13:51:47.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/cal.c	2017-10-04 11:40:58.600921825 +0200
+@@ -58,7 +58,7 @@
+ #include <sys/time.h>
+ #endif
+ 
+-#ifdef __MINGW32__
++#if defined (__MINGW32__) || defined (__MINGW64__)
+ #include "mingw32.h"
+ #if STD_MINGW
+ #include <winsock.h>
+diff -uNr gcc-4.0.4/gcc/ada/cstreams.c gcc-4.0.4_patched/gcc/ada/cstreams.c
+--- gcc-4.0.4/gcc/ada/cstreams.c	2003-11-18 11:00:43.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/cstreams.c	2017-10-04 11:40:58.600921825 +0200
+@@ -156,7 +156,7 @@
+ char *
+ __gnat_full_name (char *nam, char *buffer)
+ {
+-#if defined(__EMX__) || defined (__MINGW32__)
++#if defined(__EMX__) || defined (__MINGW32__) || defined(__MINGW64__)
+   /* If this is a device file return it as is; under Windows NT and
+      OS/2 a device file end with ":".  */
+   if (nam[strlen (nam) - 1] == ':')
+diff -uNr gcc-4.0.4/gcc/ada/ctrl_c.c gcc-4.0.4_patched/gcc/ada/ctrl_c.c
+--- gcc-4.0.4/gcc/ada/ctrl_c.c	2003-10-31 02:08:43.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/ctrl_c.c	2017-10-04 11:40:58.600921825 +0200
+@@ -97,7 +97,7 @@
+ 
+ /* Windows implementation */
+ 
+-#elif defined (__MINGW32__)
++#elif defined (__MINGW32__) || defined (__MINGW64__)
+ 
+ #include "mingw32.h"
+ #include <windows.h>
+diff -uNr gcc-4.0.4/gcc/ada/gsocket.h gcc-4.0.4_patched/gcc/ada/gsocket.h
+--- gcc-4.0.4/gcc/ada/gsocket.h	2005-01-27 12:52:46.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/gsocket.h	2017-10-04 11:40:58.600921825 +0200
+@@ -42,7 +42,7 @@
+ #define FD_SETSIZE 1024
+ #include <windows.h>
+ 
+-#ifdef __MINGW32__
++#if defined (__MINGW32__) || defined (__MINGW64__)
+ #include "mingw32.h"
+ #if STD_MINGW
+ #include <winsock.h>
+@@ -62,6 +62,6 @@
+ #include "system.h"
+ #endif
+ 
+-#if !(defined (VMS) || defined (__MINGW32__) || defined(__rtems__))
++#if !(defined (VMS) || defined (__MINGW32__) || defined (__MINGW64__) || defined(__rtems__))
+ # include <sys/socket.h>
+ #endif
+diff -uNr gcc-4.0.4/gcc/ada/init.c gcc-4.0.4_patched/gcc/ada/init.c
+--- gcc-4.0.4/gcc/ada/init.c	2005-02-10 16:43:53.000000000 +0100
++++ gcc-4.0.4_patched/gcc/ada/init.c	2017-10-04 11:40:58.600921825 +0200
+@@ -814,7 +814,7 @@
+ /* __gnat_initialize (NT-mingw32 Version) */
+ /******************************************/
+ 
+-#elif defined (__MINGW32__)
++#elif defined (__MINGW32__) || defined (__MINGW64__)
+ #include <windows.h>
+ 
+ void
+diff -uNr gcc-4.0.4/gcc/ada/sysdep.c gcc-4.0.4_patched/gcc/ada/sysdep.c
+--- gcc-4.0.4/gcc/ada/sysdep.c	2004-10-27 14:28:44.000000000 +0200
++++ gcc-4.0.4_patched/gcc/ada/sysdep.c	2017-10-04 11:40:58.600921825 +0200
+@@ -171,7 +171,7 @@
+   _setmode (handle, O_TEXT);
+ }
+ 
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) || defined(__MINGW64__)
+ #include <windows.h>
+ 
+ /* Return the name of the tty.   Under windows there is no name for
+@@ -293,7 +293,7 @@
+   || (defined (__svr4__) && defined (i386)) || defined (__Lynx__) \
+   || defined (__CYGWIN__) || defined (__FreeBSD__)
+ 
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) || defined(__MINGW64__)
+ #if OLD_MINGW
+ #include <termios.h>
+ #else
+@@ -449,7 +449,7 @@
+       decc$bsd_nocbreak ();
+     }
+   else
+-#elif defined (__MINGW32__)
++#elif defined (__MINGW32__) || defined(__MINGW64__)
+   int fd = fileno (stream);
+   int char_waiting;
+   int eot_ch = 4; /* Ctrl-D */
+@@ -699,7 +699,7 @@
+ }
+ 
+ #else
+-#if defined (VMS) || defined (__MINGW32__)
++#if defined (VMS) || defined (__MINGW32__) || defined(__MINGW64__)
+ 
+ /* __gnat_localtime_r is not needed on NT and VMS */
+ 
+diff -uNr gcc-4.0.4/gcc/config.build gcc-4.0.4_patched/gcc/config.build
+--- gcc-4.0.4/gcc/config.build	2003-10-02 01:51:10.000000000 +0200
++++ gcc-4.0.4_patched/gcc/config.build	2017-10-04 11:45:49.971646367 +0200
+@@ -77,7 +77,7 @@
+     build_xm_file=i386/xm-cygwin.h
+     build_exeext=.exe
+     ;;
+-  i[34567]86-*-mingw32*)
++  i[34567]86-*-mingw32* | x86_64-*-mingw32*)
+     build_xm_file=i386/xm-mingw32.h
+     build_exeext=.exe
+     ;;
+diff -uNr gcc-4.0.4/gcc/config.gcc gcc-4.0.4_patched/gcc/config.gcc
+--- gcc-4.0.4/gcc/config.gcc	2006-10-16 01:59:21.000000000 +0200
++++ gcc-4.0.4_patched/gcc/config.gcc	2017-10-04 11:46:00.919720148 +0200
+@@ -1170,7 +1170,7 @@
+ 		thread_file='posix'
+ 	fi
+ 	;;
+-i[34567]86-*-mingw32*)
++i[34567]86-*-mingw32* | x86_64-*-mingw32*)
+ 	tm_file="${tm_file} i386/unix.h i386/bsd.h i386/gas.h dbxcoff.h i386/cygming.h i386/mingw32.h"
+ 	xm_file=i386/xm-mingw32.h
+ 	tmake_file="i386/t-cygming i386/t-mingw32"
+diff -uNr gcc-4.0.4/gcc/config.host gcc-4.0.4_patched/gcc/config.host
+--- gcc-4.0.4/gcc/config.host	2005-03-07 23:46:13.000000000 +0100
++++ gcc-4.0.4_patched/gcc/config.host	2017-10-04 11:46:16.147829306 +0200
+@@ -150,7 +150,7 @@
+     host_xmake_file=i386/x-cygwin
+     host_exeext=.exe
+     ;;
+-  i[34567]86-*-mingw32*)
++  i[34567]86-*-mingw32* | x86_64-*-mingw32*)
+     host_xm_file=i386/xm-mingw32.h
+     host_xmake_file=i386/x-mingw32
+     host_exeext=.exe
+diff -uNr gcc-4.0.4/gcc/gthr-win32.h gcc-4.0.4_patched/gcc/gthr-win32.h
+--- gcc-4.0.4/gcc/gthr-win32.h	2004-09-25 16:36:40.000000000 +0200
++++ gcc-4.0.4_patched/gcc/gthr-win32.h	2017-10-04 11:40:58.600921825 +0200
+@@ -64,7 +64,7 @@
+ #define __GTHREADS 1
+ 
+ #include <errno.h>
+-#ifdef __MINGW32__
++#if defined(__MINGW32__)) || defined(__MINGW64__))
+ #include <_mingw.h>
+ #endif
+ 
+diff -uNr gcc-4.0.4/include/libiberty.h gcc-4.0.4_patched/include/libiberty.h
+--- gcc-4.0.4/include/libiberty.h	2005-04-26 02:17:20.000000000 +0200
++++ gcc-4.0.4_patched/include/libiberty.h	2017-10-04 11:40:58.600921825 +0200
+@@ -96,7 +96,7 @@
+    to find the declaration so provide a fully prototyped one.  If it
+    is 1, we found it so don't provide any declaration at all.  */
+ #if !HAVE_DECL_BASENAME
+-#if defined (__GNU_LIBRARY__ ) || defined (__linux__) || defined (__FreeBSD__) || defined (__OpenBSD__) || defined(__NetBSD__) || defined (__CYGWIN__) || defined (__CYGWIN32__) || defined (__MINGW32__) || defined (HAVE_DECL_BASENAME)
++#if defined (__GNU_LIBRARY__ ) || defined (__linux__) || defined (__FreeBSD__) || defined (__OpenBSD__) || defined(__NetBSD__) || defined (__CYGWIN__) || defined (__CYGWIN32__) || defined (__MINGW32__) || defined(__MINGW64__) || defined (HAVE_DECL_BASENAME)
+ extern char *basename PARAMS ((const char *));
+ #else
+ extern char *basename ();
+diff -uNr gcc-4.0.4/libgfortran/intrinsics/cpu_time.c gcc-4.0.4_patched/libgfortran/intrinsics/cpu_time.c
+--- gcc-4.0.4/libgfortran/intrinsics/cpu_time.c	2005-09-29 14:28:52.000000000 +0200
++++ gcc-4.0.4_patched/libgfortran/intrinsics/cpu_time.c	2017-10-04 11:40:58.600921825 +0200
+@@ -89,7 +89,7 @@
+    intrnsic.  Returns a CPU time in microseconds or -1 if no CPU time
+    could be computed.  */
+ 
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) || defined(__MINGW64__)
+ 
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+diff -uNr gcc-4.0.4/libgfortran/intrinsics/getlog.c gcc-4.0.4_patched/libgfortran/intrinsics/getlog.c
+--- gcc-4.0.4/libgfortran/intrinsics/getlog.c	2005-09-29 14:28:52.000000000 +0200
++++ gcc-4.0.4_patched/libgfortran/intrinsics/getlog.c	2017-10-04 11:40:58.600921825 +0200
+@@ -40,7 +40,7 @@
+ 
+ 
+ /* Windows32 version */
+-#if defined __MINGW32__ && !defined  HAVE_GETLOGIN
++#if (defined(__MINGW32__) || defined(__MINGW64__)) && !defined  HAVE_GETLOGIN
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+ #include <lmcons.h>  /* for UNLEN */ 
+diff -uNr gcc-4.0.4/libgfortran/intrinsics/getXid.c gcc-4.0.4_patched/libgfortran/intrinsics/getXid.c
+--- gcc-4.0.4/libgfortran/intrinsics/getXid.c	2005-09-29 14:28:52.000000000 +0200
++++ gcc-4.0.4_patched/libgfortran/intrinsics/getXid.c	2017-10-04 11:40:58.600921825 +0200
+@@ -38,7 +38,7 @@
+ 
+ #include "libgfortran.h"
+ 
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) || defined(__MINGW64__)
+ #define HAVE_GETPID
+ #include <process.h>
+ #endif
+diff -uNr gcc-4.0.4/libgfortran/intrinsics/hostnm.c gcc-4.0.4_patched/libgfortran/intrinsics/hostnm.c
+--- gcc-4.0.4/libgfortran/intrinsics/hostnm.c	2005-09-29 14:28:52.000000000 +0200
++++ gcc-4.0.4_patched/libgfortran/intrinsics/hostnm.c	2017-10-04 11:40:58.600921825 +0200
+@@ -40,7 +40,7 @@
+ 
+ 
+ /* Windows32 version */
+-#if defined __MINGW32__ && !defined  HAVE_GETHOSTNAME
++#if (defined(__MINGW32__) || defined(__MINGW64__)) && !defined  HAVE_GETHOSTNAME
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+ #include <errno.h>
+diff -uNr gcc-4.0.4/libgfortran/intrinsics/sleep.c gcc-4.0.4_patched/libgfortran/intrinsics/sleep.c
+--- gcc-4.0.4/libgfortran/intrinsics/sleep.c	2005-09-29 14:28:52.000000000 +0200
++++ gcc-4.0.4_patched/libgfortran/intrinsics/sleep.c	2017-10-04 11:40:58.600921825 +0200
+@@ -39,7 +39,7 @@
+ #include <unistd.h>
+ #endif
+ 
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) || defined(__MINGW64__)
+ # include <windows.h>
+ # undef sleep
+ # define sleep(x) Sleep(1000*(x))

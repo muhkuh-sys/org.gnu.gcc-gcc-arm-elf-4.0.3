@@ -1,0 +1,39 @@
+diff -aurN insight-6.8/tcl/win/tclWinChan.c insight-6.8_mingw/tcl/win/tclWinChan.c
+--- insight-6.8/tcl/win/tclWinChan.c	2006-02-02 21:02:09.000000000 +0100
++++ insight-6.8_mingw/tcl/win/tclWinChan.c	2008-08-29 09:59:35.000000000 +0200
+@@ -122,8 +122,8 @@
+ };
+ 
+ #ifdef HAVE_NO_SEH
+-static void *ESP;
+-static void *EBP;
++static void *ESP __attribute__((used));
++static void *EBP __attribute__((used));
+ #endif /* HAVE_NO_SEH */
+ 
+ 
+diff -aurN insight-6.8/tcl/win/tclWinDde.c insight-6.8_mingw/tcl/win/tclWinDde.c
+--- insight-6.8/tcl/win/tclWinDde.c	2003-01-21 20:40:22.000000000 +0100
++++ insight-6.8_mingw/tcl/win/tclWinDde.c	2008-08-29 10:04:33.000000000 +0200
+@@ -1175,7 +1175,8 @@
+ 	}
+ 	case DDE_EVAL: {
+ 	    objc -= (async + 3);
+-	    ((Tcl_Obj **) objv) += (async + 3);
++	    //((Tcl_Obj **) objv) += (async + 3);
++      objv += (async + 3);
+ 
+             /*
+ 	     * See if the target interpreter is local.  If so, execute
+diff -aurN insight-6.8/tcl/win/tclWinReg.c insight-6.8_mingw/tcl/win/tclWinReg.c
+--- insight-6.8/tcl/win/tclWinReg.c	2003-02-07 20:52:00.000000000 +0100
++++ insight-6.8_mingw/tcl/win/tclWinReg.c	2008-08-29 10:06:22.000000000 +0200
+@@ -747,7 +747,7 @@
+ 		    Tcl_NewStringObj(Tcl_DStringValue(&buf),
+ 			    Tcl_DStringLength(&buf)));
+ 	    if (regWinProcs->useWide) {
+-		while (*((Tcl_UniChar *)p)++ != 0) {}
++		while (*((Tcl_UniChar *)p++) != 0) {}
+ 	    } else {
+ 		while (*p++ != '\0') {}
+ 	    }
