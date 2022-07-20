@@ -50,8 +50,8 @@ docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && cd ${BUI
 docker exec ${CONTAINER} /bin/bash -c ". ${WORKDIR}/configuration.sh && cd ${BUILD_DIR_INSTALL_WINDOWS_X86_64} && zip -9 --recurse-paths ${BUILD_DIR}/${ARTIFACT_NAME}-windows-x86_64.zip ."
 
 # Copy the archive from the container to the host.
-docker cp ${CONTAINER}:${BUILD_DIR}/${ARTIFACT_NAME}-windows-x86.tar.gz targets/
-docker cp ${CONTAINER}:${BUILD_DIR}/${ARTIFACT_NAME}-windows-x86_64.tar.gz targets/
+docker cp ${CONTAINER}:${BUILD_DIR}/${ARTIFACT_NAME}-windows-x86.zip targets/
+docker cp ${CONTAINER}:${BUILD_DIR}/${ARTIFACT_NAME}-windows-x86_64.zip targets/
 
 # Stop and remove the container.
 docker stop ${CONTAINER}
