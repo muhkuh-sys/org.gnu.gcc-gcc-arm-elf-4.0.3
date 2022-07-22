@@ -1,0 +1,293 @@
+diff -Naur newlib-1.16.0/newlib/libc/reent/closer.c newlib-1.16.0-netx1/newlib/libc/reent/closer.c
+--- newlib-1.16.0/newlib/libc/reent/closer.c	2000-02-17 20:39:47.000000000 +0100
++++ newlib-1.16.0-netx1/newlib/libc/reent/closer.c	2008-10-16 12:06:28.000000000 +0200
+@@ -42,7 +42,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _close_r (ptr, fd)
+      struct _reent *ptr;
+      int fd;
+diff -Naur newlib-1.16.0/newlib/libc/reent/execr.c newlib-1.16.0-netx1/newlib/libc/reent/execr.c
+--- newlib-1.16.0/newlib/libc/reent/execr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/execr.c	2008-10-16 12:07:22.000000000 +0200
+@@ -52,7 +52,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_execve_r, (ptr, name, argv, env),
+      struct _reent *ptr _AND
+      char *name _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/fcntlr.c newlib-1.16.0-netx1/newlib/libc/reent/fcntlr.c
+--- newlib-1.16.0/newlib/libc/reent/fcntlr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/fcntlr.c	2008-10-16 12:07:34.000000000 +0200
+@@ -47,7 +47,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_fcntl_r, (ptr, fd, cmd, arg),
+      struct _reent *ptr _AND
+      int fd _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/fstat64r.c newlib-1.16.0-netx1/newlib/libc/reent/fstat64r.c
+--- newlib-1.16.0/newlib/libc/reent/fstat64r.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/fstat64r.c	2008-10-16 12:07:45.000000000 +0200
+@@ -53,7 +53,7 @@
+ 	that define __LARGE64_FILES.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_fstat64_r, (ptr, fd, pstat),
+      struct _reent *ptr _AND
+      int fd _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/fstatr.c newlib-1.16.0-netx1/newlib/libc/reent/fstatr.c
+--- newlib-1.16.0/newlib/libc/reent/fstatr.c	2000-08-24 20:51:09.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/fstatr.c	2008-10-16 12:07:55.000000000 +0200
+@@ -50,7 +50,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _fstat_r (ptr, fd, pstat)
+      struct _reent *ptr;
+      int fd;
+diff -Naur newlib-1.16.0/newlib/libc/reent/getreent.c newlib-1.16.0-netx1/newlib/libc/reent/getreent.c
+--- newlib-1.16.0/newlib/libc/reent/getreent.c	2007-09-07 02:45:55.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/getreent.c	2008-10-16 12:08:11.000000000 +0200
+@@ -7,7 +7,7 @@
+ #undef __getreent
+ #endif
+ 
+-struct _reent *
++struct _reent * __attribute__((weak))
+ _DEFUN_VOID(__getreent)
+ {
+   return _impure_ptr;
+diff -Naur newlib-1.16.0/newlib/libc/reent/gettimeofdayr.c newlib-1.16.0-netx1/newlib/libc/reent/gettimeofdayr.c
+--- newlib-1.16.0/newlib/libc/reent/gettimeofdayr.c	2007-07-06 18:56:30.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/gettimeofdayr.c	2008-10-16 12:08:22.000000000 +0200
+@@ -59,7 +59,7 @@
+ 	Check libc.a to see if its available on yours.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_gettimeofday_r, (ptr, ptimeval, ptimezone),
+      struct _reent *ptr _AND
+      struct timeval *ptimeval _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/impure.c newlib-1.16.0-netx1/newlib/libc/reent/impure.c
+--- newlib-1.16.0/newlib/libc/reent/impure.c	2004-09-15 23:44:39.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/impure.c	2008-10-16 12:13:23.000000000 +0200
+@@ -2,6 +2,6 @@
+ 
+ /* Note that there is a copy of this in sys/reent.h.  */
+ #ifndef __ATTRIBUTE_IMPURE_PTR__
+-#define __ATTRIBUTE_IMPURE_PTR__
++#define __ATTRIBUTE_IMPURE_PTR__  __attribute__((weak))
+ #endif
+ 
+diff -Naur newlib-1.16.0/newlib/libc/reent/linkr.c newlib-1.16.0-netx1/newlib/libc/reent/linkr.c
+--- newlib-1.16.0/newlib/libc/reent/linkr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/linkr.c	2008-10-16 12:09:21.000000000 +0200
+@@ -49,7 +49,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_link_r, (ptr, old, new),
+      struct _reent *ptr _AND
+      _CONST char *old _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/lseek64r.c newlib-1.16.0-netx1/newlib/libc/reent/lseek64r.c
+--- newlib-1.16.0/newlib/libc/reent/lseek64r.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/lseek64r.c	2008-10-16 12:09:31.000000000 +0200
+@@ -48,7 +48,7 @@
+         with large file support.
+ */
+ 
+-_off64_t
++_off64_t __attribute__((weak))
+ _DEFUN (_lseek64_r, (ptr, fd, pos, whence),
+      struct _reent *ptr _AND
+      int fd _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/lseekr.c newlib-1.16.0-netx1/newlib/libc/reent/lseekr.c
+--- newlib-1.16.0/newlib/libc/reent/lseekr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/lseekr.c	2008-10-16 12:10:15.000000000 +0200
+@@ -45,7 +45,7 @@
+ 	<<errno>>.
+ */
+ 
+-_off_t
++_off_t __attribute__((weak))
+ _DEFUN (_lseek_r, (ptr, fd, pos, whence),
+      struct _reent *ptr _AND
+      int fd _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/open64r.c newlib-1.16.0-netx1/newlib/libc/reent/open64r.c
+--- newlib-1.16.0/newlib/libc/reent/open64r.c	2002-08-26 20:56:06.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/open64r.c	2008-10-16 12:10:25.000000000 +0200
+@@ -49,7 +49,7 @@
+         large file support.
+ */
+ 
+-int
++int __attribute__((weak))
+ _open64_r (ptr, file, flags, mode)
+      struct _reent *ptr;
+      _CONST char *file;
+diff -Naur newlib-1.16.0/newlib/libc/reent/openr.c newlib-1.16.0-netx1/newlib/libc/reent/openr.c
+--- newlib-1.16.0/newlib/libc/reent/openr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/openr.c	2008-10-16 12:10:34.000000000 +0200
+@@ -46,7 +46,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_open_r, (ptr, file, flags, mode),
+      struct _reent *ptr _AND
+      _CONST char *file _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/readr.c newlib-1.16.0-netx1/newlib/libc/reent/readr.c
+--- newlib-1.16.0/newlib/libc/reent/readr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/readr.c	2008-10-16 12:10:43.000000000 +0200
+@@ -45,7 +45,7 @@
+ 	<<errno>>.
+ */
+ 
+-_ssize_t
++_ssize_t __attribute__((weak))
+ _DEFUN (_read_r, (ptr, fd, buf, cnt),
+      struct _reent *ptr _AND
+      int fd _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/renamer.c newlib-1.16.0-netx1/newlib/libc/reent/renamer.c
+--- newlib-1.16.0/newlib/libc/reent/renamer.c	2007-09-18 21:32:43.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/renamer.c	2008-10-16 12:11:18.000000000 +0200
+@@ -46,7 +46,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_rename_r, (ptr, old, new),
+      struct _reent *ptr _AND
+      _CONST char *old _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/sbrkr.c newlib-1.16.0-netx1/newlib/libc/reent/sbrkr.c
+--- newlib-1.16.0/newlib/libc/reent/sbrkr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/sbrkr.c	2008-10-16 12:11:26.000000000 +0200
+@@ -48,7 +48,7 @@
+ 	<<errno>>.
+ */
+ 
+-void *
++void * __attribute__((weak))
+ _DEFUN (_sbrk_r, (ptr, incr),
+      struct _reent *ptr _AND
+      ptrdiff_t incr)
+diff -Naur newlib-1.16.0/newlib/libc/reent/signalr.c newlib-1.16.0-netx1/newlib/libc/reent/signalr.c
+--- newlib-1.16.0/newlib/libc/reent/signalr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/signalr.c	2008-10-16 12:11:55.000000000 +0200
+@@ -49,7 +49,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_kill_r, (ptr, pid, sig),
+      struct _reent *ptr _AND
+      int pid _AND
+@@ -88,7 +88,7 @@
+ 	still must have the reentrant pointer argument.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_getpid_r, (ptr),
+      struct _reent *ptr)
+ {
+diff -Naur newlib-1.16.0/newlib/libc/reent/signgam.c newlib-1.16.0-netx1/newlib/libc/reent/signgam.c
+--- newlib-1.16.0/newlib/libc/reent/signgam.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/signgam.c	2008-10-16 12:12:06.000000000 +0200
+@@ -7,7 +7,7 @@
+ 
+ #ifndef _REENT_ONLY
+ 
+-int *
++int * __attribute__((weak))
+ _DEFUN_VOID (__signgam)
+ {
+   return &_REENT_SIGNGAM(_REENT);
+diff -Naur newlib-1.16.0/newlib/libc/reent/statr.c newlib-1.16.0-netx1/newlib/libc/reent/statr.c
+--- newlib-1.16.0/newlib/libc/reent/statr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/statr.c	2008-10-16 12:13:37.000000000 +0200
+@@ -51,7 +51,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_stat_r, (ptr, file, pstat),
+      struct _reent *ptr _AND
+      _CONST char *file _AND
+diff -Naur newlib-1.16.0/newlib/libc/reent/timesr.c newlib-1.16.0-netx1/newlib/libc/reent/timesr.c
+--- newlib-1.16.0/newlib/libc/reent/timesr.c	2007-02-21 20:22:33.000000000 +0100
++++ newlib-1.16.0-netx1/newlib/libc/reent/timesr.c	2008-10-16 12:13:45.000000000 +0200
+@@ -50,7 +50,7 @@
+ 	<<errno>>.
+ */
+ 
+-clock_t
++clock_t __attribute__((weak))
+ _DEFUN (_times_r, (ptr, ptms),
+      struct _reent *ptr _AND
+      struct tms *ptms)
+diff -Naur newlib-1.16.0/newlib/libc/reent/unlinkr.c newlib-1.16.0-netx1/newlib/libc/reent/unlinkr.c
+--- newlib-1.16.0/newlib/libc/reent/unlinkr.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/unlinkr.c	2008-10-16 12:13:53.000000000 +0200
+@@ -43,7 +43,7 @@
+ 	<<errno>>.
+ */
+ 
+-int
++int __attribute__((weak))
+ _DEFUN (_unlink_r, (ptr, file),
+      struct _reent *ptr _AND
+      _CONST char *file)
+diff -Naur newlib-1.16.0/newlib/libc/reent/writer.c newlib-1.16.0-netx1/newlib/libc/reent/writer.c
+--- newlib-1.16.0/newlib/libc/reent/writer.c	2003-06-03 21:48:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/reent/writer.c	2008-10-16 12:14:02.000000000 +0200
+@@ -45,7 +45,7 @@
+ 	<<errno>>.
+ */
+ 
+-_ssize_t
++_ssize_t __attribute__((weak))
+ _DEFUN (_write_r, (ptr, fd, buf, cnt),
+      struct _reent *ptr _AND
+      int fd _AND
+diff -Naur newlib-1.16.0/newlib/libc/stdlib/mlock.c newlib-1.16.0-netx1/newlib/libc/stdlib/mlock.c
+--- newlib-1.16.0/newlib/libc/stdlib/mlock.c	2005-10-28 23:21:07.000000000 +0200
++++ newlib-1.16.0-netx1/newlib/libc/stdlib/mlock.c	2008-10-16 12:15:56.000000000 +0200
+@@ -43,7 +43,7 @@
+ __LOCK_INIT_RECURSIVE(static, __malloc_lock_object);
+ #endif
+ 
+-void
++void __attribute__((weak))
+ __malloc_lock (ptr)
+      struct _reent *ptr;
+ {
+@@ -52,7 +52,7 @@
+ #endif
+ }
+ 
+-void
++void __attribute__((weak))
+ __malloc_unlock (ptr)
+      struct _reent *ptr;
+ {

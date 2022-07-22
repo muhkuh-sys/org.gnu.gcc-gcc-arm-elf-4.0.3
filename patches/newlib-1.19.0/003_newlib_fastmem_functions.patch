@@ -1,0 +1,105 @@
+diff -aurN newlib-1.19.0/newlib/libc/string/memccpy.c newlib-1.19.0-netx/newlib/libc/string/memccpy.c
+--- newlib-1.19.0/newlib/libc/string/memccpy.c	2010-09-22 03:15:07.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memccpy.c	2011-05-26 10:14:18.000000000 +0000
+@@ -70,7 +70,7 @@
+ 	size_t len0)
+ {
+ 
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   _PTR ptr = NULL;
+   char *dst = (char *) dst0;
+   char *src = (char *) src0;
+diff -aurN newlib-1.19.0/newlib/libc/string/memchr.c newlib-1.19.0-netx/newlib/libc/string/memchr.c
+--- newlib-1.19.0/newlib/libc/string/memchr.c	2008-05-26 23:31:08.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memchr.c	2011-05-26 10:14:30.000000000 +0000
+@@ -77,7 +77,7 @@
+   _CONST unsigned char *src = (_CONST unsigned char *) src_void;
+   unsigned char d = c;
+ 
+-#if !defined(PREFER_SIZE_OVER_SPEED) && !defined(__OPTIMIZE_SIZE__)
++#if !defined(PREFER_SIZE_OVER_SPEED)
+   unsigned long *asrc;
+   unsigned long  mask;
+   int i;
+diff -aurN newlib-1.19.0/newlib/libc/string/memcmp.c newlib-1.19.0-netx/newlib/libc/string/memcmp.c
+--- newlib-1.19.0/newlib/libc/string/memcmp.c	2005-03-06 20:40:05.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memcmp.c	2011-05-26 10:14:54.000000000 +0000
+@@ -55,7 +55,7 @@
+ 	_CONST _PTR m2 _AND
+ 	size_t n)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   unsigned char *s1 = (unsigned char *) m1;
+   unsigned char *s2 = (unsigned char *) m2;
+ 
+diff -aurN newlib-1.19.0/newlib/libc/string/memcpy.c newlib-1.19.0-netx/newlib/libc/string/memcpy.c
+--- newlib-1.19.0/newlib/libc/string/memcpy.c	2010-09-22 03:15:07.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memcpy.c	2011-05-26 10:15:04.000000000 +0000
+@@ -55,7 +55,7 @@
+ 	_CONST _PTR src0 _AND
+ 	size_t len0)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *dst = (char *) dst0;
+   char *src = (char *) src0;
+ 
+diff -aurN newlib-1.19.0/newlib/libc/string/memmem.c newlib-1.19.0-netx/newlib/libc/string/memmem.c
+--- newlib-1.19.0/newlib/libc/string/memmem.c	2008-01-12 04:25:55.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memmem.c	2011-05-26 10:15:27.000000000 +0000
+@@ -39,7 +39,7 @@
+ 
+ #include <string.h>
+ 
+-#if !defined(PREFER_SIZE_OVER_SPEED) && !defined(__OPTIMIZE_SIZE__)
++#if !defined(PREFER_SIZE_OVER_SPEED)
+ # define RETURN_TYPE void *
+ # define AVAILABLE(h, h_l, j, n_l) ((j) <= (h_l) - (n_l))
+ # include "str-two-way.h"
+@@ -62,7 +62,7 @@
+        the beginning of the string.  */
+     return (void *) haystack;
+ 
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+ 
+   /* Less code size, but quadratic performance in the worst case.  */
+   while (needle_len <= haystack_len)
+diff -aurN newlib-1.19.0/newlib/libc/string/memmove.c newlib-1.19.0-netx/newlib/libc/string/memmove.c
+--- newlib-1.19.0/newlib/libc/string/memmove.c	2010-09-22 03:15:07.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memmove.c	2011-05-26 10:15:40.000000000 +0000
+@@ -60,7 +60,7 @@
+ 	_CONST _PTR src_void _AND
+ 	size_t length)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *dst = dst_void;
+   _CONST char *src = src_void;
+ 
+diff -aurN newlib-1.19.0/newlib/libc/string/mempcpy.c newlib-1.19.0-netx/newlib/libc/string/mempcpy.c
+--- newlib-1.19.0/newlib/libc/string/mempcpy.c	2010-09-22 03:15:07.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/mempcpy.c	2011-05-26 10:15:49.000000000 +0000
+@@ -54,7 +54,7 @@
+ 	_CONST _PTR src0 _AND
+ 	size_t len0)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *dst = (char *) dst0;
+   char *src = (char *) src0;
+ 
+diff -aurN newlib-1.19.0/newlib/libc/string/memset.c newlib-1.19.0-netx/newlib/libc/string/memset.c
+--- newlib-1.19.0/newlib/libc/string/memset.c	2008-05-27 18:44:40.000000000 +0000
++++ newlib-1.19.0-netx/newlib/libc/string/memset.c	2011-05-26 10:15:59.000000000 +0000
+@@ -47,7 +47,7 @@
+ {
+   char *s = (char *) m;
+ 
+-#if !defined(PREFER_SIZE_OVER_SPEED) && !defined(__OPTIMIZE_SIZE__)
++#if !defined(PREFER_SIZE_OVER_SPEED)
+   int i;
+   unsigned long buffer;
+   unsigned long *aligned_addr;

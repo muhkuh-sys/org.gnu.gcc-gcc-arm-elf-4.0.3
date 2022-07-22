@@ -2,15 +2,15 @@
 
 PACKAGE_VERSION="1"
 
-GCC_VER="4.0.4"
+GCC_VER="4.0.3"
 GCC="gcc-$GCC_VER.tar.bz2"
 GCC_URL="ftp://ftp.gwdg.de/pub/misc/gcc/releases/gcc-$GCC_VER/$GCC"
 
-BINUTILS_VER="2.21.1"
+BINUTILS_VER="2.17"
 BINUTILS="binutils-${BINUTILS_VER}a.tar.bz2"
 BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/$BINUTILS"
 
-NEWLIB_VER="1.19.0"
+NEWLIB_VER="1.16.0"
 NEWLIB="newlib-$NEWLIB_VER.tar.gz"
 NEWLIB_URL="ftp://sourceware.org/pub/newlib/$NEWLIB"
 

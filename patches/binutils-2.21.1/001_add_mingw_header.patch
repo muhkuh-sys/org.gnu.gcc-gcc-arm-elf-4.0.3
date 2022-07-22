@@ -1,0 +1,15 @@
+diff -uNr binutils-2.21.1/binutils/bucomm.h binutils-2.21.1_patched/binutils/bucomm.h
+--- binutils-2.21.1/binutils/bucomm.h	2009-09-02 09:22:31.000000000 +0200
++++ binutils-2.21.1_patched/binutils/bucomm.h	2017-09-29 11:18:03.957033225 +0200
+@@ -20,6 +20,11 @@
+    Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
+    MA 02110-1301, USA.  */
+ 
++
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
+ #ifndef _BUCOMM_H
+ #define _BUCOMM_H
+ 

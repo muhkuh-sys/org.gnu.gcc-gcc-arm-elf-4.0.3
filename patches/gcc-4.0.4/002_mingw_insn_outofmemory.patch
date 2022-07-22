@@ -1,0 +1,13 @@
+diff -aurN gcc-4.0.4/gcc/genmodes.c gcc-4.0.4-netx/gcc/genmodes.c
+--- gcc-4.0.4/gcc/genmodes.c	2004-10-15 16:47:12.000000000 +0200
++++ gcc-4.0.4-netx/gcc/genmodes.c	2010-12-11 09:36:07.000000000 +0100
+@@ -748,8 +748,7 @@
+ /* Output routines.  */
+ 
+ #define tagged_printf(FMT, ARG, TAG) do {		\
+-  int count_;						\
+-  printf ("  " FMT ",%n", ARG, &count_);		\
++  int count_ = printf ("  " FMT ",", ARG);		\
+   printf ("%*s/* %s */\n", 27 - count_, "", TAG);	\
+ } while (0)
+ 

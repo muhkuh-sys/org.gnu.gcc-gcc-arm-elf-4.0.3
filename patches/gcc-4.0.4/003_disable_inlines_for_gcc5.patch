@@ -1,0 +1,11 @@
+--- gcc-4.0.4/gcc/toplev.h	2005-09-09 02:51:59.000000000 +0200
++++ gcc-4.0.4_patched/gcc/toplev.h	2017-09-28 10:50:03.963392167 +0200
+@@ -168,7 +168,7 @@
+ extern int floor_log2                  (unsigned HOST_WIDE_INT);
+ 
+ /* Inline versions of the above for speed.  */
+-#if GCC_VERSION >= 3004
++#if GCC_VERSION >= 3004 && GCC_VERSION <= 5000
+ # if HOST_BITS_PER_WIDE_INT == HOST_BITS_PER_LONG
+ #  define CLZ_HWI __builtin_clzl
+ #  define CTZ_HWI __builtin_ctzl

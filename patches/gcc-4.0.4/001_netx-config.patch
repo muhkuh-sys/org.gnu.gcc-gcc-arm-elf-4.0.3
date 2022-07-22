@@ -1,0 +1,25 @@
+diff -aurN gcc-4.0.4/gcc/config/arm/t-arm-elf gcc-4.0.4-netx/gcc/config/arm/t-arm-elf
+--- gcc-4.0.4/gcc/config/arm/t-arm-elf	2004-09-01 13:14:21.000000000 +0200
++++ gcc-4.0.4-netx/gcc/config/arm/t-arm-elf	2010-12-10 22:32:01.000000000 +0100
+@@ -11,6 +11,10 @@
+ MULTILIB_EXCEPTIONS  = 
+ MULTILIB_MATCHES     =
+ 
++MULTILIB_OPTIONS      += mcpu=arm926ej-s/mcpu=arm966e-s
++MULTILIB_DIRNAMES     += arm926ej-s arm966e-s
++MULTILIB_EXCEPTIONS   += *mcpu=arm926ej-s/*mcpu=arm966e-s* *mcpu=arm926ej-s/*mhard-float* *mcpu=arm966e-s/*mhard-float* *mcpu=arm926ej-s/*mcpu=arm7* *mcpu=arm966e-s/*mcpu=arm7*
++
+ # MULTILIB_OPTIONS    += mcpu=ep9312
+ # MULTILIB_DIRNAMES   += ep9312
+ # MULTILIB_EXCEPTIONS += *mthumb/*mcpu=ep9312*
+@@ -23,8 +27,8 @@
+ # MULTILIB_DIRNAMES   += fpu soft
+ # MULTILIB_EXCEPTIONS += *mthumb/*mhard-float*
+ # 
+-# MULTILIB_OPTIONS    += mno-thumb-interwork/mthumb-interwork
+-# MULTILIB_DIRNAMES   += normal interwork
++MULTILIB_OPTIONS    += mno-thumb-interwork/mthumb-interwork
++MULTILIB_DIRNAMES   += normal interwork
+ # 
+ # MULTILIB_OPTIONS    += fno-leading-underscore/fleading-underscore
+ # MULTILIB_DIRNAMES   += elf under

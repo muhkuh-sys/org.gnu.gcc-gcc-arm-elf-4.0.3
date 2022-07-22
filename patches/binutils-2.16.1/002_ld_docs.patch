@@ -1,0 +1,12 @@
+diff -uNr binutils-2.16.1/ld/ld.texinfo binutils-2.16.1_patched/ld/ld.texinfo
+--- binutils-2.16.1/ld/ld.texinfo	2005-06-12 20:35:45.000000000 +0200
++++ binutils-2.16.1_patched/ld/ld.texinfo	2022-07-21 13:51:06.470089571 +0200
+@@ -1589,7 +1589,7 @@
+ 
+ @kindex --version-script=@var{version-scriptfile}
+ @cindex version script, symbol versions
+-@itemx --version-script=@var{version-scriptfile}
++@item --version-script=@var{version-scriptfile}
+ Specify the name of a version script to the linker.  This is typically
+ used when creating shared libraries to specify additional information
+ about the version hierarchy for the library being created.  This option
