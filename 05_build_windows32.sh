@@ -37,8 +37,8 @@ mkdir -p ${BUILD_DIR_BUILD}/windows_x86/gcc-${GCC_VER}/gcc
 cp ${BUILD_DIR_BUILD}/linux/gcc-${GCC_VER}/gcc/xgcc ${BUILD_DIR_BUILD}/windows_x86/gcc-${GCC_VER}/gcc/
 
 # Copy the fixincl tool.
-mkdir -p ${BUILD_DIR_BUILD}/windows_x86/gcc-4.0.3/build-i686-w64-mingw32/fixincludes
-cp ${BUILD_DIR_BUILD}/linux/gcc-4.0.3/fixincludes/fixincl ${BUILD_DIR_BUILD}/windows_x86/gcc-4.0.3/build-i686-w64-mingw32/fixincludes/
+mkdir -p ${BUILD_DIR_BUILD}/windows_x86/gcc-${GCC_VER}/build-i686-w64-mingw32/fixincludes
+cp ${BUILD_DIR_BUILD}/linux/gcc-${GCC_VER}/fixincludes/fixincl ${BUILD_DIR_BUILD}/windows_x86/gcc-${GCC_VER}/build-i686-w64-mingw32/fixincludes/
 
 mkdir -p ${WINDOWS_X86_PREFIX}/${ARM_TARGET}
 mkdir -p ${WINDOWS_X86_PREFIX}/${ARM_TARGET}
