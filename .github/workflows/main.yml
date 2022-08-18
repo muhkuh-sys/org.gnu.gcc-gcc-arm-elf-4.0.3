@@ -39,18 +39,18 @@ jobs:
       with:
         name: artifacts_ubuntu_22.04
         path: targets
-  windows:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      # Use the old checkout v1 here. The newer v2 requires git 2.28 which is not available in the standard distribution.
-      uses: actions/checkout@v1
-      with:
-        submodules: recursive
-    - name: Build
-      run: ./docker_build_windows.sh
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: artifacts_windows
-        path: targets
+#  windows:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Checkout repository
+#      # Use the old checkout v1 here. The newer v2 requires git 2.28 which is not available in the standard distribution.
+#      uses: actions/checkout@v1
+#      with:
+#        submodules: recursive
+#    - name: Build
+#      run: ./docker_build_windows.sh
+#    - name: Upload artifacts
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: artifacts_windows
+#        path: targets
