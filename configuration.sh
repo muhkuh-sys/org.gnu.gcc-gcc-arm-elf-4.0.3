@@ -6,11 +6,11 @@ GCC_VER="4.0.3"
 GCC="gcc-$GCC_VER.tar.bz2"
 GCC_URL="ftp://ftp.gwdg.de/pub/misc/gcc/releases/gcc-$GCC_VER/$GCC"
 
-BINUTILS_VER="2.17"
+BINUTILS_VER="2.16.1"
 BINUTILS="binutils-${BINUTILS_VER}a.tar.bz2"
 BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/$BINUTILS"
 
-NEWLIB_VER="1.16.0"
+NEWLIB_VER="1.14.0"
 NEWLIB="newlib-$NEWLIB_VER.tar.gz"
 NEWLIB_URL="ftp://sourceware.org/pub/newlib/$NEWLIB"
 

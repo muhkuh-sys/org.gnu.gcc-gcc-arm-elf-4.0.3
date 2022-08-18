@@ -1,0 +1,84 @@
+diff -uNr newlib-1.16.0/newlib/libc/string/memccpy.c newlib-1.16.0_patched/newlib/libc/string/memccpy.c
+--- newlib-1.16.0/newlib/libc/string/memccpy.c	2002-07-23 23:38:00.000000000 +0200
++++ newlib-1.16.0_patched/newlib/libc/string/memccpy.c	2022-07-21 17:06:06.654948390 +0200
+@@ -70,7 +70,7 @@
+ 	size_t len0)
+ {
+ 
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   _PTR ptr = NULL;
+   char *dst = (char *) dst0;
+   char *src = (char *) src0;
+diff -uNr newlib-1.16.0/newlib/libc/string/memchr.c newlib-1.16.0_patched/newlib/libc/string/memchr.c
+--- newlib-1.16.0/newlib/libc/string/memchr.c	2005-10-28 23:21:07.000000000 +0200
++++ newlib-1.16.0_patched/newlib/libc/string/memchr.c	2022-07-21 17:07:25.494954857 +0200
+@@ -71,7 +71,7 @@
+ 	int c _AND
+ 	size_t length)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   _CONST unsigned char *src = (_CONST unsigned char *) src_void;
+ 
+   c &= 0xff;
+diff -uNr newlib-1.16.0/newlib/libc/string/memcmp.c newlib-1.16.0_patched/newlib/libc/string/memcmp.c
+--- newlib-1.16.0/newlib/libc/string/memcmp.c	2005-03-06 21:40:05.000000000 +0100
++++ newlib-1.16.0_patched/newlib/libc/string/memcmp.c	2022-07-21 17:06:06.690948392 +0200
+@@ -55,7 +55,7 @@
+ 	_CONST _PTR m2 _AND
+ 	size_t n)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   unsigned char *s1 = (unsigned char *) m1;
+   unsigned char *s2 = (unsigned char *) m2;
+ 
+diff -uNr newlib-1.16.0/newlib/libc/string/memcpy.c newlib-1.16.0_patched/newlib/libc/string/memcpy.c
+--- newlib-1.16.0/newlib/libc/string/memcpy.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.16.0_patched/newlib/libc/string/memcpy.c	2022-07-21 17:06:06.690948392 +0200
+@@ -55,7 +55,7 @@
+ 	_CONST _PTR src0 _AND
+ 	size_t len0)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *dst = (char *) dst0;
+   char *src = (char *) src0;
+ 
+diff -uNr newlib-1.16.0/newlib/libc/string/memmove.c newlib-1.16.0_patched/newlib/libc/string/memmove.c
+--- newlib-1.16.0/newlib/libc/string/memmove.c	2000-02-17 20:39:48.000000000 +0100
++++ newlib-1.16.0_patched/newlib/libc/string/memmove.c	2022-07-21 17:06:06.690948392 +0200
+@@ -60,7 +60,7 @@
+ 	_CONST _PTR src_void _AND
+ 	size_t length)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *dst = dst_void;
+   _CONST char *src = src_void;
+ 
+diff -uNr newlib-1.16.0/newlib/libc/string/mempcpy.c newlib-1.16.0_patched/newlib/libc/string/mempcpy.c
+--- newlib-1.16.0/newlib/libc/string/mempcpy.c	2002-07-23 23:38:00.000000000 +0200
++++ newlib-1.16.0_patched/newlib/libc/string/mempcpy.c	2022-07-21 17:06:06.690948392 +0200
+@@ -54,7 +54,7 @@
+ 	_CONST _PTR src0 _AND
+ 	size_t len0)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *dst = (char *) dst0;
+   char *src = (char *) src0;
+ 
+diff -uNr newlib-1.16.0/newlib/libc/string/memset.c newlib-1.16.0_patched/newlib/libc/string/memset.c
+--- newlib-1.16.0/newlib/libc/string/memset.c	2002-11-27 19:10:16.000000000 +0100
++++ newlib-1.16.0_patched/newlib/libc/string/memset.c	2022-07-21 17:07:37.238956111 +0200
+@@ -45,7 +45,7 @@
+ 	int c _AND
+ 	size_t n)
+ {
+-#if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
++#if defined(PREFER_SIZE_OVER_SPEED)
+   char *s = (char *) m;
+ 
+   while (n-- != 0)

@@ -1,0 +1,19 @@
+diff -aurN newlib-1.19.0/newlib/configure.host newlib-1.19.0-netx/newlib/configure.host
+--- newlib-1.19.0/newlib/configure.host	2010-12-02 20:30:46.000000000 +0100
++++ newlib-1.19.0-netx/newlib/configure.host	2010-12-22 08:28:27.000000000 +0100
+@@ -98,6 +98,7 @@
+ 	;;
+   arm)
+ 	machine_dir=arm
++	newlib_cflags="${newlib_cflags} -DSMALL_MEMORY -fdata-sections -ffunction-sections"
+ 	;;
+   avr*)
+ 	newlib_cflags="${newlib_cflags} -DPREFER_SIZE_OVER_SPEED -mcall-prologues"
+@@ -248,6 +249,7 @@
+ 	;;
+   thumb)
+ 	machine_dir=arm
++	newlib_cflags="${newlib_cflags} -DSMALL_MEMORY -fdata-sections -ffunction-sections"
+ 	;;
+   tic4x|c4x)
+ 	machine_dir=tic4x
