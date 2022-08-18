@@ -17,7 +17,8 @@ echo "Building binutils-${BINUTILS_VER}"
 echo "=================================="
 
 pushd ${BUILD_DIR_BUILD}/linux/binutils-${BINUTILS_VER}
-${BUILD_DIR_SRC}/binutils-${BINUTILS_VER}/configure --target=${ARM_TARGET} --prefix=${LINUX_PREFIX} --enable-interwork --enable-multilib --disable-shared --disable-nls --enable-werror=no
+# NOTE: Debug info must be enabled or linking libgcc will crash.
+CFLAGS=-g ${BUILD_DIR_SRC}/binutils-${BINUTILS_VER}/configure --target=${ARM_TARGET} --prefix=${LINUX_PREFIX} --enable-interwork --enable-multilib --disable-shared --disable-nls --enable-werror=no
 make all install
 popd
 
